@@ -1,0 +1,29 @@
+---------------- TASK 1 -------------------
+
+method.h <- Header file with declarations of functions used
+add.c <- contains definition of add function
+sub.c <- contains definition of sub function
+mpy.c <- contains definition of mpy function
+div.c <- contains definition of div function
+ass4_1.c <- Takes input from file and call functions to compute operations
+
+run.sh
+	- Compile add.c and sub.c to get add.o and sub.o object files
+	- Create an archive using these object files
+	- Create the shared object file from mpy.c and div.c
+	- Finally create "executable" 
+
+HOW TO RUN
+    -  chmod 700 run.sh
+    -  ./run.sh
+    -  ./executable path_of_input_file
+
+---------------- TASK 2 --------------------
+
+task2.sh
+
+	- Generate the gdb script and run it accordingly
+
+HOW TO RUN
+    -  chmod 700 task2.sh
+    -  ./task2.sh path_Of_Input_File

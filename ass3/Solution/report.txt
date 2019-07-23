@@ -1,0 +1,34 @@
+/////////	 TASK1
+
+1. Initially used IFS to separate lines of the given file.
+
+2. Separated filename, permissions and path using IFS with delimiter space
+
+3. Separated permissions by delimiter ','.
+
+4. Initialised a variable cnt to 0 and updated its value based on permissions(binary).
+
+5. If '/' was not present at the end of path then concatenate into it.
+
+6. Separated 
+- libraries using the output of file command
+- pdf files using the output of file command 
+- executables using the output of file command
+
+7. Then checked if the directories are present in the destination. If not, created them using mkdir.
+
+8. Copied each of them to their respective destination path
+
+9. At the end change the permission of the file (of users)
+
+/////////    TASK2
+
+1. Initiated infinite loop
+
+2. Used wget to download rss feed : wget -qO data http://static.cricinfo.com/rss/livescores.xml
+
+3. Used grep to extract the score of the team passed in the argument : grep "$1" "data" | tail -n1 | grep -o ">.*<" | grep -o "[^> <]*"
+
+4. Checked if the score was changed or not
+
+5. If it was changed then send notification and update the variable storing previous score. 

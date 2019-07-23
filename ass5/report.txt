@@ -1,0 +1,108 @@
+
+#----------------------------------------------------	ERROR HANDLING   ------------------------------------------------#
+
+>> Checked if the number of parameters entered are not equal to 2 
+----------> Which is stored in "$#" in bash.
+
+>> Checked if one of the parameters entered is the path of a C -program-file. 
+----------> Using file and grep command. 
+
+                        file $1 | grep -Ei ".*:.*c.*program.*text|.*:.*C.*source.*text"
+
+>> Checked if the other file path entered exists!? 
+----------> Using [ -e $testcases ] command which checks if the file exists .
+
+>> Copied the file to this directory ( To solve the problem of .gcda files to be present in the same folder as .c file)
+
+>> After the gcc statement, If compilation error occurred then reported and exited.
+----------> Using "$?" Which stored the returned value of previous command. Which is zero in case of no error.
+
+
+
+
+#---------------------------------------------------   TASK 1 ----------------------------------------------------------#
+
+>> Compiled the code with the relevant profiling flags and stored errors in .compilation.log file. ( For Warnings )
+
+					gcc -fprofile-arcs -ftest-coverage myfile.c -o task1 2> .compilation.log
+
+>> In a Loop read line by line from the test case file and passed it as parameters to our c-executable. Executed gcov after each execution to update the myfile.c.gcov.
+------------> Taken care of the last line of testcase file with [[ -n $testcase ]]
+
+>> Exactracted all the Execution frequency from myfile.c.gcov and made the corresponding .csv file. ( execution_frequency.csv )
+
+			grep -Eo "^[ ]*[0-9]+:[ ]*[0-9]+:|^[ ]*[#]+:[ ]*[0-9]+:" myfile.c.gcov | tr ":" " " | awk '{if($1 == "#####") $1=0; print $2","$1;}' > execution_frequency.csv
+
+	----> First Extract all lines with line numbers calculated by gcov (Including files with ##### (counted as not executed))
+	----> Substitute all colons with space
+	----> Write all the lines numbers with their corresponding frequency in the execution_frequency.csv (Also converting ##### to 0)
+
+>> Extracted all the Branch 0 bias from myfile.c.gcov and made the corresponding .csv file. ( branch0_bias.csv)
+
+			grep -E -B 1 "^[ ]*branch[ ]*0[ ]*taken[ ]*[0-9]*%" myfile.c.gcov | awk '{if(NR%3 == 1) print $2; if(NR%3 == 2) print $4;}' | awk 'NR%2{printf $0;next;}1'| tr -d "%" | tr ":" "," > branch0_bias.csv
+
+	----> First Extract all branch 0 lines and also 1 line above it ( with -B 1 flag ).
+	----> Then extract the corresponding fields with % bias and line number. ( NR stores row number )
+	----> Merge every two consecutive rows. (One had line number and one % bias)
+	----> Remove "%" and substitute ":" with "," and store it in branch0_bias.csv
+
+
+
+
+
+#---------------------------------------------------   TASK 2 ----------------------------------------------------------#
+
+	>> Compiled the code with the relevant profiling flags and stored errors in .compilation.log file. ( For Warnings )
+
+						gcc -pg -o task2 task2.c 2> .compilation.log
+
+	>> In a Loop read testcase line by line from the testcases file and passed it to our c-executable. Summarised the data obtained in gmon.out file in gmon.sum file.
+	------------> Used flag to create the first gmon.sum file from gmon.out as gmon.sum can't be created manually.
+
+	>> Stored the flat_profile and call_graph in the flat_profile and call_graph files respectively.
+
+					gprof -b -p task2 gmon.sum > flat_profile						// For Flat profile 
+					gprof -b -q task2 gmon.sum > call_graph							// For Call Graph
+
+	>> Read Line by line through the call_graph file
+
+	--------------> Find Parent and update parent & parentTime variables with the respective values.
+
+					echo $line | grep -E "^\[.*\." > /dev/null					// As parent line start with "["
+
+	--------------> Find its children and update child & childTime variables with the respective values.
+
+					flag = 1 on getting parent so whenever we have flag = 1 => these are children if....
+
+
+	--------------> Detecting the end of children with "------" pattern and update flag = 0!
+
+	>> Find time of a particular function from flat_profile
+
+					cat flat_profile | grep -E $child | awk '{print $3}   // As the third column contains time for every function;.
+
+
+	#----Error Handling---#
+
+				>> Many times the time of main function is not shown. So whenever unable to find time, just take the time value as 0.00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

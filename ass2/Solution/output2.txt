@@ -1,0 +1,13 @@
+/bin/sh,2255,lrwxrwxrwx,1
+/bin/sh,28267,lrwxrwxrwx,1
+/usr/bin/dbus-daemon,1442,-rwxr-xr-x,1
+/usr/bin/dbus-daemon,6516,-rwxr-xr-x,1
+/usr/bin/dbus-daemon,733,-rwxr-xr-x,1
+/usr/bin/gnome-keyring-daemon,1210,-rwxr-xr-x,1
+/usr/bin/gnome-software,1850,-rwxr-xr-x,1
+/usr/bin/ibus-daemon,1375,-rwxr-xr-x,1
+/usr/bin/pulseaudio,1748,-rwxr-xr-x,1
+/usr/bin/python3,3052,lrwxrwxrwx,1
+/usr/bin/unity-scope-loader,3048,-rwxr-xr-x,1
+/usr/bin/whoopsie,1534,-rwxr-xr-x,1
+/usr/bin/zeitgeist-daemon,2259,-rwxr-xr-x,1

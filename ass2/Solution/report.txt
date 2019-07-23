@@ -1,0 +1,37 @@
+////	TASK1  \\\\
+Execute: ./runme1 > file.txt
+By this command STDOUT will be redirected to file.txt and STDERR will be left on terminal. We get file descriptor and signal.
+Execute: ./runme2 4>&1 &
+4>&1 is used to redirect output of file descriptor having number 4 to STDOUT and '&' is used to run this command in background.
+Then send signal by "kill -10 pid", where 10 is for sigusr1 and pid is process id of process running due to earlier command.
+Output will appear on terminal.
+
+
+////    TASK2  \\\\
+First command executed is: ls -l /usr/bin | tr -s " " | cut -d ' ' -f1,2,9 | awk '$3="/usr/bin/"$3' > files.txt
+ls -l /usr/bin lists all files of /usr/bin will permissions,links,etc. Then redirect this output to "tr -s " " ".
+It will translate all the spaces into single space. Then cut command is used to pick the required fields. Then awk is used to
+concatenate "/usr/bin" to the files of /usr/bin. Then redirect this output to files.txt.
+
+Then similarly execute: ls -l /bin | tr -s " " | cut -d ' ' -f1,2,9 | awk '$3="/bin/"$3' >> files.txt   
+This time the directory is /bin and the final output is appended to files.txt.
+
+Then execute: ps -eaux | grep -Ea "([0-9] /usr/bin)|([0-9] /bin)" |  tr -s " " | cut -d ' ' -f2,11 > process.txt 
+ps -eaux is used to list all the processes. grep is used to retrieve only processes originating from /usr/bin or /bin.
+Then again tr is used to convert all spaces into single space. Then cut is used to pick the required fields i.e. pid and program name.
+Then the output is redirected to process.txt.
+
+Then execute: sort -k 2,2 process.txt > newprocess.txt                                         
+This command sorts process.txt according to second field i.e. program name and output is redirected to newprocess.txt.
+
+Then execute: sort -k 3,3 files.txt > newfiles.txt                                         
+This command sorts files.txt according to third field i.e. program name and output is redirected to newfiles.txt.
+
+join -1 2 -2 3 newprocess.txt newfiles.txt | tr -s '[:blank:]' ',' > output2.txt 
+This command joins newprocess.txt and newfiles.txt according to 2nd field of newprocess.txt(i.e. program name) and 
+3rd field of newfiles.txt(i.e. program name). Then tr command changes the spaces into commas and output is redirected to output2.txt.
+
+rm process.txt newprocess.txt newfiles.txt files.txt  
+This command removes all the unneccessary files.
+
+After executing the script(./script.sh in the directory where it is present) output2.txt will be created which contains the required output.
